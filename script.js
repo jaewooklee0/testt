@@ -1,7 +1,26 @@
 let balance = 100;
+const pegsCount = 10; // Number of pegs in each row
+const slotsCount = 17; // Total slots
 
 document.getElementById('drop-btn').addEventListener('click', dropDisk);
 
+// Create pegs on the board
+function createPegs() {
+    const pegsContainer = document.getElementById('pegs');
+    const rows = 10;
+    const offset = 30;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < pegsCount; j++) {
+            const peg = document.createElement('div');
+            peg.className = 'peg';
+            peg.style.left = `${j * (300 / pegsCount) + (i % 2) * (300 / (pegsCount * 2)) + offset}px`;
+            peg.style.top = `${i * 50 + 30}px`;
+            pegsContainer.appendChild(peg);
+        }
+    }
+}
+
+// Drop the disk
 function dropDisk() {
     const bet = parseInt(document.getElementById('bet').value);
     if (isNaN(bet) || bet <= 0 || bet > balance) {
@@ -25,9 +44,8 @@ function dropDisk() {
         let top = parseFloat(disk.style.top);
         if (top < board.clientHeight - 20) {
             top += 5;
-            disk.style.top = `${top}px`;
-            // Randomly change direction
             x += (Math.random() < 0.5 ? 5 : -5);
+            disk.style.top = `${top}px`;
             disk.style.left = `${Math.max(0, Math.min(board.clientWidth - 20, x))}px`;
         } else {
             clearInterval(fallInterval);
@@ -38,16 +56,21 @@ function dropDisk() {
     }, 100);
 }
 
+// Calculate result based on disk's landing position
 function calculateResult(x) {
     const slots = document.querySelectorAll('.slot');
     const slotWidth = slots[0].clientWidth;
     const slotIndex = Math.floor(x / slotWidth);
-    const value = parseInt(slots[slotIndex].getAttribute('data-value'));
+    const value = parseFloat(slots[slotIndex].getAttribute('data-value'));
     return value;
 }
 
+// Update balance based on winnings
 function updateBalance(winning) {
-    balance += winning * 2; // Double the bet amount as winning
+    balance += winning * bet; // Winnings based on bet
     document.getElementById('currency').innerText = balance;
-    document.getElementById('result').innerText = `You won: ${winning * 2} coins!`;
+    document.getElementById('result').innerText = `You won: ${winning * bet} coins!`;
 }
+
+// Initialize the game by creating pegs
+createPegs();

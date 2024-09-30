@@ -11,14 +11,22 @@
         <h1>Plinko Game</h1>
         <div id="balance">Balance: <span id="currency">100</span> coins</div>
         <input type="number" id="bet" placeholder="Enter your bet" min="1" max="100" />
-        <button id="drop-btn">Drop a Disk!</button>
+        <button id="drop-btn">Drop a Ball!</button>
         <div id="plinko-board">
+            <div id="pegs"></div>
             <div id="slots">
-                <div class="slot" data-value="0">0</div>
-                <div class="slot" data-value="5">5</div>
-                <div class="slot" data-value="10">10</div>
-                <div class="slot" data-value="15">15</div>
-                <div class="slot" data-value="20">20</div>
+                <div class="slot" data-value="0">0x</div>
+                <div class="slot" data-value="2">2x</div>
+                <div class="slot" data-value="4">4x</div>
+                <div class="slot" data-value="9">9x</div>
+                <div class="slot" data-value="26">26x</div>
+                <div class="slot" data-value="130">130x</div>
+                <div class="slot" data-value="1000">1000x</div>
+                <div class="slot" data-value="0.2">0.2x</div>
+                <div class="slot" data-value="0.2">0.2x</div>
+                <div class="slot" data-value="0.2">0.2x</div>
+                <div class="slot" data-value="0.2">0.2x</div>
+                <div class="slot" data-value="0.2">0.2x</div>
             </div>
         </div>
         <div id="result"></div>
