@@ -1,6 +1,17 @@
+let balance = 100;
+
 document.getElementById('drop-btn').addEventListener('click', dropDisk);
 
 function dropDisk() {
+    const bet = parseInt(document.getElementById('bet').value);
+    if (isNaN(bet) || bet <= 0 || bet > balance) {
+        alert('Please enter a valid bet amount!');
+        return;
+    }
+
+    balance -= bet;
+    document.getElementById('currency').innerText = balance;
+
     const board = document.getElementById('plinko-board');
     const disk = document.createElement('div');
     disk.className = 'disk';
@@ -16,15 +27,12 @@ function dropDisk() {
             top += 5;
             disk.style.top = `${top}px`;
             // Randomly change direction
-            if (Math.random() < 0.5) {
-                x += 5;
-            } else {
-                x -= 5;
-            }
+            x += (Math.random() < 0.5 ? 5 : -5);
             disk.style.left = `${Math.max(0, Math.min(board.clientWidth - 20, x))}px`;
         } else {
             clearInterval(fallInterval);
-            calculateResult(x);
+            const result = calculateResult(x);
+            updateBalance(result);
             disk.remove();
         }
     }, 100);
@@ -34,6 +42,12 @@ function calculateResult(x) {
     const slots = document.querySelectorAll('.slot');
     const slotWidth = slots[0].clientWidth;
     const slotIndex = Math.floor(x / slotWidth);
-    const value = slots[slotIndex].getAttribute('data-value');
-    document.getElementById('result').innerText = `You dropped into slot: ${value}`;
+    const value = parseInt(slots[slotIndex].getAttribute('data-value'));
+    return value;
+}
+
+function updateBalance(winning) {
+    balance += winning * 2; // Double the bet amount as winning
+    document.getElementById('currency').innerText = balance;
+    document.getElementById('result').innerText = `You won: ${winning * 2} coins!`;
 }
